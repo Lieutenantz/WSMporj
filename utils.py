@@ -5,6 +5,8 @@ import hashlib
 from functools import lru_cache
 import pymongo
 from pymongo.collection import Collection
+import re
+import numpy as np
 
 # import clip
 
@@ -21,3 +23,8 @@ def get_config():
 def get_file_type(image_path):
     """keep function, implement straight"""
     return "png"
+
+
+def str_2_feature_numpy(feature_str:str) -> np.ndarray:
+    feature_str = re.sub('\s+',',',feature_str)
+    return np.array(eval(feature_str),dtype=np.float32)
