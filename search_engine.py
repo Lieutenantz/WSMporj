@@ -1,5 +1,5 @@
 import numpy as np
-from utils import read_config, get_mongo_collection
+from utils import get_config, get_mongo_collection
 
 def cosine_similarity(query_feature, feature_list):
     '''
@@ -17,7 +17,7 @@ def cosine_similarity(query_feature, feature_list):
 class SearchEngine:
     def __init__(self, config):
         self.config = config
-        self.featrue_dim = config['model_dim'] #TODO
+        self.featrue_dim = config['model_dim']
         self.mongo_collection = get_mongo_collection()
     
     def _get_search_filter(self, args):
@@ -73,7 +73,7 @@ class SearchEngine:
 
 
 if __name__ == "__main__":
-    config = read_config()
+    config = get_config()
     SE = SearchEngine(config)
 
     print(SE.search(query_feature, 10))
