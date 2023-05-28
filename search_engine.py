@@ -4,9 +4,9 @@ from utils import read_config, get_mongo_collection
 def cosine_similarity(query_feature, feature_list):
     '''
     对query的文本feature与图片列表的feature计算余弦相似度
-    query_feature: (dim)
-    feature_list:  (image_num, dim)
-    return: list (image_num)
+    query_feature: list: (dim)
+    feature_list:  list: (image_num, dim)
+    return: list: (image_num)
     '''
     query_feature = query_feature / np.linalg.norm(query_feature, keepdims=True) # 归一化query feature
     feature_list = feature_list / np.linalg.norm(feature_list, axis=1, keepdims=True) # 归一化image feature
@@ -49,8 +49,8 @@ class SearchEngine:
                 'minimum_height': ...,
                 'maximum_height': ...
             }
-        return: topn_filename: list()
-                topn_score: list()
+        return: topn_filename: list(topn) # 最相似的 topn 个图片路径/索引
+                topn_score: list(topn) # 最相似的 topn 个图片相似度分数
         '''
         cursor = self.mongo_collection.find(self._get_search_filter(size_condition)) # 获取限制图片大小的数据
         feature_list = []
