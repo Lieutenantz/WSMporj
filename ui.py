@@ -1,25 +1,15 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk, font
-from functools import partial as pto
-import retrieval
-import os
 from PIL import Image, ImageTk
 from utils import read_config
 import search_engine as se
 
-# 目前先把基本的界面做出来，后期还需要加一个筛选条件的按钮
-global photo
-global image_labels
-image_labels = []
 fig_size = 300
 result_num = 5 # 展示的结果图片数
 
 class Framelist(tk.Tk):
     def __init__(self):
-        # self.images = []  # 保存PhotoImage对象的列表
-        # self.canvas_list = []
-
         self.window = tk.Tk()
         self.window.title("WSM图片搜索引擎")
         self.window.geometry("1000x800")  # 设置主窗口大小
@@ -156,7 +146,7 @@ class Framelist(tk.Tk):
         # 返回的是图片路径和数据
         self.images, self.scores = self.SE.search(feature, result_num, size_condition=size_condition)
 
-        # 到这里我们已经获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
+        # 获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
         self.create_frames()
         
 
