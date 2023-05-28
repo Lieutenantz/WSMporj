@@ -4,6 +4,7 @@ from tkinter import ttk, font
 from PIL import Image, ImageTk
 from utils import read_config
 import search_engine as se
+import clipkits as ck
 
 fig_size = 300
 result_num = 5 # 展示的结果图片数
@@ -127,9 +128,7 @@ class Framelist(tk.Tk):
         self.window.mainloop()
 
     def search(self):
-        text = self.entry.get()
-        # TODO:这里要把text转化为feature
-        # feature = ...(text)
+        feature = ck.TextToFeature(self.entry.get())
 
         # 获取尺寸限制
         w1 = self.entry_minw.get()
