@@ -5,6 +5,7 @@ import hashlib
 from functools import lru_cache
 import pymongo
 from pymongo.collection import Collection
+from PIL import Image
 import re
 import numpy as np
 
@@ -21,24 +22,46 @@ def get_config():
     return conf
 
 def get_file_type(image_path):
-    """keep function, implement straight"""
-    return "png"
+    libmagic_output = os.popen("file '" + image_path + "'").read().strip()
+    libmagic_output = libmagic_output.split(":", 1)[1]
+    if "PNG" in libmagic_output:
+        return "png"
+    if "JPEG" in libmagic_output:
+        return "jpg"
+    if "GIF" in libmagic_output:
+        return "gif"
+    if "PC bitmap" in libmagic_output:
+        return "bmp"
+    return None
 
-
-def str_2_feature_numpy(feature_str:str) -> np.ndarray:
-    feature_str = re.sub('\s+',',',feature_str)
-    return np.array(eval(feature_str),dtype=np.float32)
-
-
-def read_config():
-    with open(config.json) as f:
-        con = json.load(f)
-    return con
-
+def get_image_size(imagepath:str):
+    image = Image.open(imagepath)
+    return image.size
 
 @lru_cache(maxsize=1)
-def get_mongo_collection():
-    config = read_config()
+def get_mongo_collection() -> Collection:
+    config = get_config()
     mongo_client = pymongo.MongoClient("mongodb://{}:{}/".format(config['mongodb-host'], config['mongodb-port']))
     mongo_collection = mongo_client[config['mongodb-database']][config['mongodb-collection']]
     return mongo_collection
+
+def calc_md5(filepath):
+    with open(filepath, 'rb') as f:
+        md5 = hashlib.md5()
+        while True:
+            data = f.read(4096)
+            if not data:
+                break
+            md5.update(data)
+        return md5.hexdigest()
+
+def get_full_path(basedir, basename):
+    md5hash, ext = basename.split(".") 
+    folder_path = "{}/{}/{}/".format(basedir, ext, md5hash[:2])
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    return "{}{}".format(folder_path, basename)
+
+if __name__ == "__main__":
+    print(calc_md5("../image_dataset/000001x2.png"))
+

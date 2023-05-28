@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+{
+    "mongodb-host": "127.0.0.1",
+    "mongodb-port": 27017,
+    "mongodb-database": "db",
+    "mongodb-collection": "images",
+
+    "device": "cpu",
+    "storage-type": "float32",
+
+    "import-image-base": "./data"
+=======
 {
     "mongodb-host": "127.0.0.1",
     "mongodb-port": 27017,
@@ -5,4 +17,5 @@
     "mongodb-collection": "images",
 
     "model_dim": 512
+>>>>>>> origin/main
 }
