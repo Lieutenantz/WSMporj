@@ -34,9 +34,6 @@ def get_file_type(image_path):
         return "bmp"
     return None
 
-
-<<<<<<< HEAD
-
 def get_image_size(imagepath:str):
     image = Image.open(imagepath)
     return image.size
@@ -67,22 +64,4 @@ def get_full_path(basedir, basename):
 
 if __name__ == "__main__":
     print(calc_md5("../image_dataset/000001x2.png"))
-=======
-def str_2_feature_numpy(feature_str:str) -> np.ndarray:
-    feature_str = re.sub('\s+',',',feature_str)
-    return np.array(eval(feature_str),dtype=np.float32)
 
-
-def read_config():
-    with open(config.json) as f:
-        con = json.load(f)
-    return con
-
-
-@lru_cache(maxsize=1)
-def get_mongo_collection():
-    config = read_config()
-    mongo_client = pymongo.MongoClient("mongodb://{}:{}/".format(config['mongodb-host'], config['mongodb-port']))
-    mongo_collection = mongo_client[config['mongodb-database']][config['mongodb-collection']]
-    return mongo_collection
->>>>>>> origin/main
