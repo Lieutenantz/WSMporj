@@ -4,10 +4,9 @@ from tkinter import ttk, font
 from PIL import Image, ImageTk
 from utils import read_config
 import search_engine as se
-import clipkits as ck
 
 fig_size = 300
-result_num = 5 # 展示的结果图片数
+topn = 20 # 展示的结果图片数
 
 class Framelist(tk.Tk):
     def __init__(self):
@@ -128,27 +127,28 @@ class Framelist(tk.Tk):
         self.window.mainloop()
 
     def search(self):
-        feature = ck.TextToFeature(self.entry.get())
+        text = self.entry.get()
 
         # 获取尺寸限制
         w1 = self.entry_minw.get()
+        if not w1:
+            w1 = None
         w2 = self.entry_maxw.get()
+        if not w1:
+            w2 = None
         h1 = self.entry_minh.get()
+        if not w1:
+            h1 = None
         h2 = self.entry_maxh.get()
-        size_condition = {
-                'minimum_width': int(w1),
-                'maximum_width': int(w2),
-                'minimum_height': int(h1),
-                'maximum_height': int(h2)
-            }
-
+        if not w1:
+            h2 = None
+        
         # 返回的是图片路径和数据
-        self.images, self.scores = self.SE.search(feature, result_num, size_condition=size_condition)
+        self.images, self.scores = self.SE.serve(text, topn, w1, w2, h1, h2)
 
         # 获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
         self.create_frames()
         
-
     # 根据路径获取单张图片
     def load_image(self, path):
         image = Image.open(path)
