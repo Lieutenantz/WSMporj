@@ -9,14 +9,16 @@ from pymongo.collection import Collection
 
 from tqdm import tqdm
 
-import clip_model
+import clipkits
 
 import utils
 
 def import_single_image(image_path: str, feature: np.ndarray,
-                        config: dict, mongo_collection: Collection, copy=False):
+                        config: dict, mongo_collection: Collection, copy=False, printlog=False):
     """
         一张新图片地址, 和由模型生成的feature存入指定的mongo_collection中
+        copy: 是否复制到指定文件夹中
+        printlog: 是否打印成功插入数据库的信息: <文件索引名> inserted successfully
     """
     image_type = utils.get_file_type(image_path)
     if image_type is None:
@@ -57,10 +59,12 @@ def import_single_image(image_path: str, feature: np.ndarray,
     }
 
     x = mongo_collection.insert_one(document)
+    if printlog:
+        print(f"{document.filename} insert successfully")
     return x
 
-def import_dir(base_dir: str, model: clip_model.CLIPModel,
-               config: dict, mongo_collection: Collection, copy=False):
+def import_dir(base_dir: str, cliptool: clipkits.ClipTool,
+               config: dict, mongo_collection: Collection, copy=False, printlog=False):
     """
         从一个存放着多张图片的文件夹中导入所有图片到数据库中
     """
@@ -68,20 +72,28 @@ def import_dir(base_dir: str, model: clip_model.CLIPModel,
     filelist = [f for f in filelist if os.path.isfile(f)]
 
     for filename in tqdm(filelist):
-        feature = model.get_image_feature(filename)
-        import_single_image(filename, feature, config, mongo_collection, copy=copy)
+        feature = cliptool.ImageToFeature(filename)
+        import_single_image(filename, feature, config, mongo_collection, copy=copy, printlog=printlog)
 
 def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--copy', action='store_true')
-    parser.add_argument('dir')
+    parser.add_argument('path', help="an image path or a directory path")
+    parser.add_argument('--printlog', action='store_true', help="print insertion log")
     args = parser.parse_args()
-
     config = utils.get_config()
     mongo_collection = utils.get_mongo_collection()
-    model = clip_model.get_model()
-    import_dir(args.dir, model, config, mongo_collection, args.copy)
+    cliptool = clipkits.ClipTool()
+    path = args.path
+    if os.path.exists(path):
+        if os.path.isfile(path):
+            image_feature = cliptool.ImageToFeature(path)
+            import_single_image(path, image_feature,config, mongo_collection, copy=args.copy, printlog=args.printlog)
+        elif os.path.isdir(path):
+            import_dir(args.dir, cliptool, config, mongo_collection, args.copy,args.printlog)
+    else:
+        print("the path does not exist!!")
 
 if __name__ == '__main__':
     main()
