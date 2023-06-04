@@ -6,7 +6,7 @@ from utils import get_config
 import search_engine as se
 import import_images as ii
 
-color1 = "#66CCFF"
+color1 = "#66CCFF" # 蓝色
 color2 = "#90EE90" # 浅绿
 fig_size = 300
 topn = 20 # 展示的结果图片数
