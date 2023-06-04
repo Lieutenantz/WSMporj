@@ -16,10 +16,10 @@ class Framelist(tk.Tk):
         self.window = tk.Tk()
         self.window.configure(bg="white")
         self.window.title("WSM图片搜索引擎",)
-        self.window.geometry("1000x800")  
+        self.window.geometry("1300x800")  
 
         # 左侧展示图片的滚动栏
-        self.scrollable_frame = tk.Frame(self.window, bg="white", width=700)  # 设置背景色为白色
+        self.scrollable_frame = tk.Frame(self.window, bg="white", width=1000)  # 设置背景色为白色
         self.scrollable_frame.pack(side=tk.LEFT, fill=tk.Y)
         self.scrollable_frame.pack_propagate(False)
 
