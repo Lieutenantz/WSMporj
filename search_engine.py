@@ -78,6 +78,8 @@ class SearchEngine:
                 top_n_score.append(float(cosine_sim_score_list[idx]))
                 top_n_width.append(width_list[idx])
                 top_n_height.append(height_list[idx])
+            else:
+                break
 
         return top_n_index, top_n_score, top_n_width, top_n_height
     
