@@ -41,8 +41,10 @@ def get_image_size(imagepath:str):
 @lru_cache(maxsize=1)
 def get_mongo_collection() -> Collection:
     config = get_config()
+    print("mongodb://{}:{}/".format(config['mongodb-host'], config['mongodb-port']))
     mongo_client = pymongo.MongoClient("mongodb://{}:{}/".format(config['mongodb-host'], config['mongodb-port']))
     mongo_collection = mongo_client[config['mongodb-database']][config['mongodb-collection']]
+    print(f"file count: {mongo_collection.count_documents({})}")
     return mongo_collection
 
 def calc_md5(filepath):

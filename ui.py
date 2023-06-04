@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk, font
 from PIL import Image, ImageTk
-from utils import read_config
+from utils import get_config
 import search_engine as se
 
 fig_size = 300
@@ -67,6 +67,7 @@ class Framelist(tk.Tk):
         self.frame_list.bind("<Configure>", self._on_frame_configure)  # 监听frame大小变化事件
 
     def create_frames(self):
+        print(f"images list len: {len(self.images)}")
         for idx, image in enumerate(self.images):
             # 创建该图片对应的frame, label和canvas
             style = ttk.Style()
@@ -93,12 +94,13 @@ class Framelist(tk.Tk):
             # 需要显示的属性
             str = ""
             str += "name:"
-            str += image.name
+            # print(image)
+            str += image
             str += '\n'
 
             str = ""
             str += "score:"
-            str += self.scores[idx]
+            str += f"{self.scores[idx]}"
             str += '\n'
 
             text.insert(tk.END, str)
@@ -121,7 +123,7 @@ class Framelist(tk.Tk):
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         
     def run(self):
-        config = read_config()
+        config = get_config()
         self.SE = se.SearchEngine(config)
 
         self.window.mainloop()
@@ -151,12 +153,14 @@ class Framelist(tk.Tk):
         
     # 根据路径获取单张图片
     def load_image(self, path):
+        print(path)
         image = Image.open(path)
         resized_image = image.resize((280, 280), Image.ANTIALIAS)
         return ImageTk.PhotoImage(resized_image)
 
-    
-
+if __name__=="__main__":
+    a = Framelist()
+    a.run()
         
 
 

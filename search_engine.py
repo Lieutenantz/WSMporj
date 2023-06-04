@@ -12,7 +12,7 @@ def cosine_similarity(query_feature, feature_list):
     '''
     query_feature = query_feature / np.linalg.norm(query_feature, keepdims=True) # 归一化query feature
     feature_list = feature_list / np.linalg.norm(feature_list, axis=1, keepdims=True) # 归一化image feature
-    score = query_feature.dot(feature_list.T)
+    score = query_feature.numpy().dot(feature_list.T)
     return score
 
 
@@ -54,7 +54,7 @@ class SearchEngine:
         feature_list = []
         index_list = []
         for item in cursor:
-            feature_list.append(np.frombuffer(item['featrue'], dtype=float32))
+            feature_list.append(np.frombuffer(item['feature'], dtype=np.float32))
             index_list.append(item['filename'])
         
         if len(feature_list) > 0:
@@ -67,7 +67,7 @@ class SearchEngine:
         top_n_index = [index_list[idx] for idx in top_n_idx]
         top_n_score = [float(cosine_sim_score_list[idx]) for idx in top_n_idx]
 
-        return top_n_filename, top_n_score
+        return top_n_index, top_n_score
     
     def serve(self, query, topn=20, minimum_width=None, maximum_width=None, minimum_height=None, maximum_height=None):
         '''
@@ -88,7 +88,7 @@ class SearchEngine:
             with torch.no_grad():
                 text_features = self.model.encode_text(texts)
             text_feature = text_features[0]
-            print(text_feature.size())
+            # print(text_feature.size())
         else:
             assert False, "Invalid query (input) type"
         

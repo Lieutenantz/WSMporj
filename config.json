@@ -1,7 +1,7 @@
 {
     "mongodb-host": "127.0.0.1",
     "mongodb-port": 27017,
-    "mongodb-database": "db",
+    "mongodb-database": "wsm",
     "mongodb-collection": "images",
 
     "device": "cpu",
