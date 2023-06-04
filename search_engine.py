@@ -60,28 +60,31 @@ class SearchEngine:
             index_list.append(item['filename'])
             width_list.append(item['width'])
             height_list.append(item['height'])
+            size_list.append(item['filesize'])
         
         if len(feature_list) > 0:
             feature_list = np.array(feature_list)
             cosine_sim_score_list = cosine_similarity(query_feature, feature_list)
         else:
-            return [], [], [], []
+            return [], [], [], [], []
 
         top_n_idx = np.argsort(cosine_sim_score_list)[::-1][:topn]
         top_n_index = []
         top_n_score = []
         top_n_width = []
         top_n_height = []
+        top_n_size = []
         for idx in top_n_idx:
             if float(cosine_sim_score_list[idx]) > 0.239:
                 top_n_index.append(index_list[idx])
                 top_n_score.append(float(cosine_sim_score_list[idx]))
                 top_n_width.append(width_list[idx])
                 top_n_height.append(height_list[idx])
+                top_n_size.append(size_list[idx])
             else:
                 break
 
-        return top_n_index, top_n_score, top_n_width, top_n_height
+        return top_n_index, top_n_score, top_n_width, top_n_height, top_n_size
     
     def serve(self, query, topn=20, minimum_width=None, maximum_width=None, minimum_height=None, maximum_height=None):
         '''
@@ -98,6 +101,7 @@ class SearchEngine:
             top_n_score(`List[float]`): scores of the result figure
             top_n_width(`List[int]`): widths of the result figure
             top_n_height(`List[int]`): heights of the result figure
+            top_n_size(`List[int]`): sizes of the result figure
         '''
         if isinstance(query, str):
             texts = clip.tokenize([query]).to(self.device)
@@ -114,8 +118,8 @@ class SearchEngine:
         if minimum_height != None: args['minimum_height'] = minimum_height
         if maximum_height != None: args['minimum_height'] = maximum_height
         
-        top_n_index, top_n_score, top_n_width, top_n_height = self._search(text_feature, topn, args)
-        return top_n_index, top_n_score, top_n_width, top_n_height
+        top_n_index, top_n_score, top_n_width, top_n_height, top_n_size = self._search(text_feature, topn, args)
+        return top_n_index, top_n_score, top_n_width, top_n_height, top_n_size
 
 
 
