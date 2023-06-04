@@ -55,6 +55,7 @@ class SearchEngine:
         index_list = []
         width_list = []
         height_list = []
+        size_list = []
         for item in cursor:
             feature_list.append(np.frombuffer(item['feature'], dtype=np.float32))
             index_list.append(item['filename'])
