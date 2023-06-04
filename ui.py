@@ -6,66 +6,121 @@ from utils import get_config
 import search_engine as se
 import import_images as ii
 
-
+color1 = "#66CCFF"
+color2 = "#90EE90" # 浅绿
 fig_size = 300
 topn = 20 # 展示的结果图片数
 
 class Framelist(tk.Tk):
     def __init__(self):
         self.window = tk.Tk()
-        self.window.title("WSM图片搜索引擎")
-        self.window.geometry("1000x800")  # 设置主窗口大小
+        self.window.configure(bg="white")
+        self.window.title("WSM图片搜索引擎",)
+        self.window.geometry("1000x800")  
 
-        self.entry = tk.Entry(self.window, width=50)
-        self.entry.pack()
+        # 左侧展示图片的滚动栏
+        self.scrollable_frame = tk.Frame(self.window, bg="white", width=700)  # 设置背景色为白色
+        self.scrollable_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.scrollable_frame.pack_propagate(False)
 
-        self.entry_frame = tk.Frame(self.window, height = 30)
-        self.entry_frame.pack(fill=X)
-        # self.entry_frame.pack_propagate(False)
-        self.entry_frame1 = tk.Frame(self.entry_frame)
-        self.entry_frame1.pack()
+        # 右侧的筛选搜索，添加图片菜单
+        self.right_frame = tk.Frame(self.window, bg=color2, width=280,
+                                    highlightthickness=2)
+        self.right_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        self.right_frame.pack_propagate(False)
 
-        self.fitlter_label1 = tk.Label(self.entry_frame1, text="宽度范围：")
+        # 右上方的搜索功能
+        self.search_frame = tk.Frame(self.right_frame, bg=color1,height= 350, width=250,
+                                     highlightthickness=2)
+        self.search_frame.pack(side=tk.TOP,)
+        self.search_frame.pack_propagate(False)
+        
+        self.search_frame_title_label = tk.Label(self.search_frame, 
+                                                 text="图片搜索",
+                                                 bg=color1,
+                                                 fg="red", 
+                                                 font=("Microsoft YaHei", 14, "bold"))
+        self.search_frame_title_label.pack(anchor="nw")
+
+        self.entry_frame = tk.Frame(self.search_frame, bg=color1, width = 280, height= 50)
+        self.entry_frame.pack(side=tk.TOP, fill=X)
+        self.entry_frame.pack_propagate(False)
+        self.entry_label = tk.Label(self.entry_frame, bg=color1,text="搜索内容:")
+        self.entry_label.pack(side=tk.LEFT)
+        self.entry = tk.Entry(self.entry_frame)
+        self.entry.pack(side=tk.LEFT)
+
+        self.entry_frame1 = tk.Frame(self.search_frame, bg=color1,width = 280, height= 50)
+        self.entry_frame1.pack(side=tk.TOP, fill=X)
+        self.entry_frame1.pack_propagate(False)
+        self.fitlter_label1 = tk.Label(self.entry_frame1, bg=color1,text="最小宽度:")
         self.fitlter_label1.pack(side=LEFT)
-        self.entry_minw = tk.Entry(self.entry_frame1, width=10)
+        self.entry_minw = tk.Entry(self.entry_frame1)
         self.entry_minw.pack(side=tk.LEFT)
-        self.fitlter_label2 = tk.Label(self.entry_frame1, text="to")
-        self.fitlter_label2.pack(side=LEFT)
-        self.entry_maxw = tk.Entry(self.entry_frame1, width=10)
-        self.entry_maxw.pack(side=tk.LEFT)
-        self.fitlter_label3 = tk.Label(self.entry_frame1, text="        ")
-        self.fitlter_label3.pack(side=LEFT)
 
-        self.fitlter_label4 = tk.Label(self.entry_frame1, text="高度范围：")
-        self.fitlter_label4.pack(side=LEFT)
-        self.entry_minh = tk.Entry(self.entry_frame1, width=10)
+        self.entry_frame2 = tk.Frame(self.search_frame, bg=color1,width = 280, height= 50)
+        self.entry_frame2.pack(side=tk.TOP, fill=X)
+        self.entry_frame2.pack_propagate(False)
+        self.fitlter_label2 = tk.Label(self.entry_frame2,bg=color1, text="最大宽度:")
+        self.fitlter_label2.pack(side=LEFT)
+        self.entry_maxw = tk.Entry(self.entry_frame2)
+        self.entry_maxw.pack(side=tk.LEFT)
+
+
+        self.entry_frame3 = tk.Frame(self.search_frame,bg=color1, width = 280, height= 50)
+        self.entry_frame3.pack(side=tk.TOP, fill=X)
+        self.entry_frame3.pack_propagate(False)
+        self.fitlter_label3 = tk.Label(self.entry_frame3, bg=color1,text="最小高度:")
+        self.fitlter_label3.pack(side=LEFT)
+        self.entry_minh = tk.Entry(self.entry_frame3)
         self.entry_minh.pack(side=tk.LEFT)
-        self.fitlter_label5 = tk.Label(self.entry_frame1, text="to")
-        self.fitlter_label5.pack(side=LEFT)
-        self.entry_maxh = tk.Entry(self.entry_frame1, width=10)
+
+        self.entry_frame4 = tk.Frame(self.search_frame, bg=color1,width = 280, height= 50)
+        self.entry_frame4.pack(side=tk.TOP, fill=X)
+        self.entry_frame4.pack_propagate(False)
+        self.fitlter_label4 = tk.Label(self.entry_frame4, bg=color1,text="最大高度:")
+        self.fitlter_label4.pack(side=LEFT)
+        self.entry_maxh = tk.Entry(self.entry_frame4)
         self.entry_maxh.pack(side=tk.LEFT)
 
-        #上传图片功能
-        self.search_button = tk.Button(self.window, text='search', 
-                                       command=self.search, bg='red', fg='white')
-        self.search_button.pack()
-        self.upload_frame = tk.Frame(self.window, height = 30)
-        self.upload_frame.pack()
-        self.upload_label = tk.Label(self.upload_frame, text="图片或文件夹路径：")
-        self.upload_label.pack(side=LEFT)
-        self.upload_entry = tk.Entry(self.upload_frame, width=50)
-        self.upload_entry.pack(side=tk.LEFT)
-        self.upload_button = tk.Button(self.upload_frame, text='添加图片', 
-                                       command=self.add_image, bg='red', fg='white')
-        self.upload_button.pack()
+        self.search_button = ttk.Button(self.search_frame, text='search', 
+                                       command=self.search)
+        self.search_button.pack(side=tk.TOP)
 
-        self.upload_demo = tk.Label(self.upload_frame, text="",width=40)
-        self.upload_demo.pack(side=LEFT)
+        #上传图片功能
+        self.upload_frame = tk.Frame(self.right_frame, bg=color1, height= 350, width=250,
+                                     highlightthickness=2)
+        self.upload_frame.pack(side=tk.BOTTOM)
+        self.upload_frame.pack_propagate(False)
+
+        self.search_frame_title_label = tk.Label(self.upload_frame, 
+                                                 text="添加图片",
+                                                 bg=color1,
+                                                 fg="red", 
+                                                 font=("Microsoft YaHei", 14, "bold"))
+        self.search_frame_title_label.pack(anchor="nw")
+
+        self.upload_frame1 = tk.Frame(self.upload_frame, bg=color1, width = 280, height= 50)
+        self.upload_frame1.pack(side=tk.TOP, fill=X)
+        self.upload_label1 = tk.Label(self.upload_frame1, bg=color1, text="图片或文件夹路径：")
+        self.upload_label1.pack(side=tk.LEFT)
+        
+
+        self.upload_frame2 = tk.Frame(self.upload_frame, bg=color1, width = 280, height= 50)
+        self.upload_frame2.pack(side=tk.TOP, fill=X)
+        self.upload_entry = tk.Entry(self.upload_frame2,width=200)
+        self.upload_entry.pack(side=tk.LEFT,fill=X)
+
+        self.upload_frame3 = tk.Frame(self.upload_frame, bg=color1, width = 280, height= 50)
+        self.upload_frame3.pack(side=tk.TOP, fill=X)
+        self.upload_button = ttk.Button(self.upload_frame3, text='添加图片', 
+                                       command=self.add_image)
+        self.upload_button.pack(side=tk.TOP)
+
+        self.upload_demo = tk.Label(self.upload_frame, bg=color1, fg="#EE0000", text="",width=40)
+        self.upload_demo.pack(side=tk.TOP)
         
         self.frames = []
-
-        self.scrollable_frame = tk.Frame(self.window, bg="white")  # 设置背景色为白色
-        self.scrollable_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         self.canvas = tk.Canvas(self.scrollable_frame, bg="white", highlightthickness=0)  # 设置Canvas背景色为白色，并去掉边框
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -116,14 +171,14 @@ class Framelist(tk.Tk):
             information += f"{self.scores[idx]*100:5.3f}%"
             information += '\n'
             
-            information += "File size:"
-            information += self.file_size[idx]
-            information += '\n'
+            # information += "File size:"
+            # information += self.file_size[idx]
+            # information += '\n'
             
             information += "Dimensions:"
-            information += "{0}".format(self.width[idx])
+            information += "{0}".format(self.widths[idx])
             information += "x"
-            information += "{0}".format(self.height[idx])
+            information += "{0}".format(self.heights[idx])
             information += '\n'
 
             text.insert(tk.END, information)
@@ -170,7 +225,7 @@ class Framelist(tk.Tk):
             h2 = None
         
         # 返回的是图片路径和数据
-        self.images, self.scores = self.SE.serve(text, topn, w1, w2, h1, h2)
+        self.images, self.scores，self.widths, self.heights = self.SE.serve(text, topn, w1, w2, h1, h2)
         for widget in self.frame_list.winfo_children():
             widget.destroy()
         # 获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
