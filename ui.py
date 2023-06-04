@@ -109,12 +109,21 @@ class Framelist(tk.Tk):
             # 需要显示的属性
             information = ""
             information += "name:"
-            # print(image)
             information += image
             information += '\n'
 
             information += "score:"
             information += f"{self.scores[idx]*100:5.3f}%"
+            information += '\n'
+            
+            information += "File size:"
+            information += self.file_size[idx]
+            information += '\n'
+            
+            information += "Dimensions:"
+            information += "{0}".format(self.width[idx])
+            information += "x"
+            information += "{0}".format(self.height[idx])
             information += '\n'
 
             text.insert(tk.END, information)
@@ -127,6 +136,7 @@ class Framelist(tk.Tk):
 
             # 应用tag到文本范围
             text.tag_add("center", "1.0", "end")
+            text.configure(state="disabled")
 
             self.frames.append(frame)
 
