@@ -171,9 +171,9 @@ class Framelist(tk.Tk):
             information += f"{self.scores[idx]*100:5.3f}%"
             information += '\n'
             
-            # information += "File size:"
-            # information += self.file_size[idx]
-            # information += '\n'
+            information += "File size:"
+            information += self.size_list[idx]
+            information += '\n'
             
             information += "Dimensions:"
             information += "{0}".format(self.widths[idx])
@@ -225,7 +225,7 @@ class Framelist(tk.Tk):
             h2 = None
         
         # 返回的是图片路径和数据
-        self.images, self.scores，self.widths, self.heights = self.SE.serve(text, topn, w1, w2, h1, h2)
+        self.images, self.scores，self.widths, self.heights, self.size_list = self.SE.serve(text, topn, w1, w2, h1, h2)
         for widget in self.frame_list.winfo_children():
             widget.destroy()
         # 获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
