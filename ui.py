@@ -117,7 +117,7 @@ class Framelist(tk.Tk):
                                        command=self.add_image)
         self.upload_button.pack(side=tk.TOP)
 
-        self.upload_demo = tk.Label(self.upload_frame, bg=color1, text="",width=40)
+        self.upload_demo = tk.Label(self.upload_frame, bg=color1, fg="#EE0000", text="",width=40)
         self.upload_demo.pack(side=tk.TOP)
         
         self.frames = []
