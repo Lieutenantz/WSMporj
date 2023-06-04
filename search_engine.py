@@ -67,10 +67,9 @@ class SearchEngine:
         top_n_index = [index_list[idx] for idx in top_n_idx]
         top_n_score = [float(cosine_sim_score_list[idx]) for idx in top_n_idx]
 
-        for idx, score in zip(top_n_index, top_n_score):
-            if score < 0.239:
-                top_n_index.remove(idx)
-                top_n_score.remove(score)
+        top_n_list = [elem for elem in zip(top_n_index, top_n_score) if elem[1]>0.239]
+        top_n_score = [elem[1] for elem in top_n_list]
+        top_n_index = [elem[0] for elem in top_n_list]
 
         return top_n_index, top_n_score
     

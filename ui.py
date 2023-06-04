@@ -58,6 +58,9 @@ class Framelist(tk.Tk):
         self.upload_button = tk.Button(self.upload_frame, text='添加图片', 
                                        command=self.add_image, bg='red', fg='white')
         self.upload_button.pack()
+
+        self.upload_demo = tk.Label(self.upload_frame, text="",width=40)
+        self.upload_demo.pack(side=LEFT)
         
         self.frames = []
 
@@ -172,7 +175,11 @@ class Framelist(tk.Tk):
     
     def add_image(self):
         path = self.upload_entry.get()
-        ii.tools(path)
+        if ii.tools(path):
+            self.upload_demo.config(text="新增图片成功")  # 插入新的文本
+        else:
+            self.upload_demo.config(text="新增图片失败")  # 插入新的文本
+
 
 if __name__=="__main__":
     a = Framelist()
