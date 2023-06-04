@@ -18,7 +18,7 @@ from PIL import Image
 class ClipTool():
     def __init__(self):
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        model, preprocess = clip.load("models/ViT-B-32.pt", device=device)
+        model, preprocess = clip.load("ViT-B/32", device=device)
         self.device=device
         self.model=model
         self.preprocess=preprocess

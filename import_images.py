@@ -27,7 +27,7 @@ def import_single_image(image_path: str, feature: np.ndarray,
 
     image_size = utils.get_image_size(image_path)
 
-    feature = feature.astype(config['storage-type']) # float32
+    feature = feature.numpy().astype(config['storage-type']) # float32
 
     if copy:
         md5hash = utils.calc_md5(image_path)
@@ -60,7 +60,7 @@ def import_single_image(image_path: str, feature: np.ndarray,
 
     x = mongo_collection.insert_one(document)
     if printlog:
-        print(f"{document.filename} insert successfully")
+        print(f"{document['filename']} insert successfully")
     return x
 
 def import_dir(base_dir: str, cliptool: clipkits.ClipTool,
@@ -74,6 +74,21 @@ def import_dir(base_dir: str, cliptool: clipkits.ClipTool,
     for filename in tqdm(filelist):
         feature = cliptool.ImageToFeature(filename)
         import_single_image(filename, feature, config, mongo_collection, copy=copy, printlog=printlog)
+
+def tools(path:str):
+    config = utils.get_config()
+    mongo_collection = utils.get_mongo_collection()
+    cliptool = clipkits.ClipTool()
+    if os.path.exists(path):
+        if os.path.isfile(path):
+            image_feature = cliptool.ImageToFeature(path)
+            import_single_image(path, image_feature,config, mongo_collection, copy=True, printlog=False)
+        elif os.path.isdir(path):
+            import_dir(path, cliptool, config, mongo_collection, True,False)
+        return True # 图片加载成功
+    else:
+        return False # 图片加载失败
+
 
 def main():
     import argparse
@@ -91,7 +106,7 @@ def main():
             image_feature = cliptool.ImageToFeature(path)
             import_single_image(path, image_feature,config, mongo_collection, copy=args.copy, printlog=args.printlog)
         elif os.path.isdir(path):
-            import_dir(args.dir, cliptool, config, mongo_collection, args.copy,args.printlog)
+            import_dir(args.path, cliptool, config, mongo_collection, args.copy,args.printlog)
     else:
         print("the path does not exist!!")
 

@@ -4,6 +4,8 @@ from tkinter import ttk, font
 from PIL import Image, ImageTk
 from utils import get_config
 import search_engine as se
+import import_images as ii
+
 
 fig_size = 300
 topn = 20 # 展示的结果图片数
@@ -43,9 +45,19 @@ class Framelist(tk.Tk):
         self.entry_maxh = tk.Entry(self.entry_frame1, width=10)
         self.entry_maxh.pack(side=tk.LEFT)
 
+        #上传图片功能
         self.search_button = tk.Button(self.window, text='search', 
                                        command=self.search, bg='red', fg='white')
         self.search_button.pack()
+        self.upload_frame = tk.Frame(self.window, height = 30)
+        self.upload_frame.pack()
+        self.upload_label = tk.Label(self.upload_frame, text="图片或文件夹路径：")
+        self.upload_label.pack(side=LEFT)
+        self.upload_entry = tk.Entry(self.upload_frame, width=50)
+        self.upload_entry.pack(side=tk.LEFT)
+        self.upload_button = tk.Button(self.upload_frame, text='添加图片', 
+                                       command=self.add_image, bg='red', fg='white')
+        self.upload_button.pack()
         
         self.frames = []
 
@@ -92,18 +104,17 @@ class Framelist(tk.Tk):
             text.pack_propagate(False)
             
             # 需要显示的属性
-            str = ""
-            str += "name:"
+            information = ""
+            information += "name:"
             # print(image)
-            str += image
-            str += '\n'
+            information += image
+            information += '\n'
 
-            str = ""
-            str += "score:"
-            str += f"{self.scores[idx]}"
-            str += '\n'
+            information += "score:"
+            information += f"{self.scores[idx]*100:5.3f}%"
+            information += '\n'
 
-            text.insert(tk.END, str)
+            text.insert(tk.END, information)
 
             custom_font = font.Font(family="Arial", size=20, weight="bold")
             text.configure(font=custom_font)
@@ -158,6 +169,10 @@ class Framelist(tk.Tk):
         image = Image.open(path)
         resized_image = image.resize((280, 280), Image.ANTIALIAS)
         return ImageTk.PhotoImage(resized_image)
+    
+    def add_image(self):
+        path = self.upload_entry.get()
+        ii.tools(path)
 
 if __name__=="__main__":
     a = Framelist()
