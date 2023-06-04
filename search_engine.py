@@ -53,25 +53,33 @@ class SearchEngine:
         cursor = self.mongo_collection.find(self._get_search_filter(size_condition)) # 获取限制图片大小的数据
         feature_list = []
         index_list = []
+        width_list = []
+        height_list = []
         for item in cursor:
             feature_list.append(np.frombuffer(item['feature'], dtype=np.float32))
             index_list.append(item['filename'])
+            width_list.append(item['width'])
+            height_list.append(item['height'])
         
         if len(feature_list) > 0:
             feature_list = np.array(feature_list)
             cosine_sim_score_list = cosine_similarity(query_feature, feature_list)
         else:
-            return [], []
-        
+            return [], [], [], []
+
         top_n_idx = np.argsort(cosine_sim_score_list)[::-1][:topn]
-        top_n_index = [index_list[idx] for idx in top_n_idx]
-        top_n_score = [float(cosine_sim_score_list[idx]) for idx in top_n_idx]
+        top_n_index = []
+        top_n_score = []
+        top_n_width = []
+        top_n_height = []
+        for idx in top_n_idx:
+            if float(cosine_sim_score_list[idx]) > 0.239:
+                top_n_index.append(index_list[idx])
+                top_n_score.append(float(cosine_sim_score_list[idx]))
+                top_n_width.append(width_list[idx])
+                top_n_height.append(height_list[idx])
 
-        top_n_list = [elem for elem in zip(top_n_index, top_n_score) if elem[1]>0.239]
-        top_n_score = [elem[1] for elem in top_n_list]
-        top_n_index = [elem[0] for elem in top_n_list]
-
-        return top_n_index, top_n_score
+        return top_n_index, top_n_score, top_n_width, top_n_height
     
     def serve(self, query, topn=20, minimum_width=None, maximum_width=None, minimum_height=None, maximum_height=None):
         '''
@@ -84,8 +92,10 @@ class SearchEngine:
             minimum_height(`int`, *Optional*): minimum figure height
             maximum_height(`int`, *Optional*): maximum figure height
         return:
-            topn_index(`List[str]`): indices in DB or paths of the result figure
-            topn_score(`List[float]`): scores of the result figure
+            top_n_index(`List[str]`): indices in DB or paths of the result figure
+            top_n_score(`List[float]`): scores of the result figure
+            top_n_width(`List[int]`): widths of the result figure
+            top_n_height(`List[int]`): heights of the result figure
         '''
         if isinstance(query, str):
             texts = clip.tokenize([query]).to(self.device)
@@ -102,8 +112,8 @@ class SearchEngine:
         if minimum_height != None: args['minimum_height'] = minimum_height
         if maximum_height != None: args['minimum_height'] = maximum_height
         
-        topn_index, topn_score = self._search(text_feature, topn, args)
-        return topn_index, topn_score
+        top_n_index, top_n_score, top_n_width, top_n_height = self._search(text_feature, topn, args)
+        return top_n_index, top_n_score, top_n_width, top_n_height
 
 
 
