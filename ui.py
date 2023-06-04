@@ -15,7 +15,7 @@ class Framelist(tk.Tk):
     def __init__(self):
         self.window = tk.Tk()
         self.window.configure(bg="white")
-        self.window.title("WSM图片搜索引擎",)
+        self.window.title("WSM IMAGE SEARCH ENGINE",)
         self.window.geometry("1000x800")  
 
         # 左侧展示图片的滚动栏
@@ -36,7 +36,7 @@ class Framelist(tk.Tk):
         self.search_frame.pack_propagate(False)
         
         self.search_frame_title_label = tk.Label(self.search_frame, 
-                                                 text="图片搜索",
+                                                 text="image search",
                                                  bg=color1,
                                                  fg="red", 
                                                  font=("Microsoft YaHei", 14, "bold"))
@@ -45,7 +45,7 @@ class Framelist(tk.Tk):
         self.entry_frame = tk.Frame(self.search_frame, bg=color1, width = 280, height= 50)
         self.entry_frame.pack(side=tk.TOP, fill=X)
         self.entry_frame.pack_propagate(False)
-        self.entry_label = tk.Label(self.entry_frame, bg=color1,text="搜索内容:")
+        self.entry_label = tk.Label(self.entry_frame, bg=color1,text="qeury:")
         self.entry_label.pack(side=tk.LEFT)
         self.entry = tk.Entry(self.entry_frame)
         self.entry.pack(side=tk.LEFT)
@@ -53,7 +53,7 @@ class Framelist(tk.Tk):
         self.entry_frame1 = tk.Frame(self.search_frame, bg=color1,width = 280, height= 50)
         self.entry_frame1.pack(side=tk.TOP, fill=X)
         self.entry_frame1.pack_propagate(False)
-        self.fitlter_label1 = tk.Label(self.entry_frame1, bg=color1,text="最小宽度:")
+        self.fitlter_label1 = tk.Label(self.entry_frame1, bg=color1,text="minimum width")
         self.fitlter_label1.pack(side=LEFT)
         self.entry_minw = tk.Entry(self.entry_frame1)
         self.entry_minw.pack(side=tk.LEFT)
@@ -61,7 +61,7 @@ class Framelist(tk.Tk):
         self.entry_frame2 = tk.Frame(self.search_frame, bg=color1,width = 280, height= 50)
         self.entry_frame2.pack(side=tk.TOP, fill=X)
         self.entry_frame2.pack_propagate(False)
-        self.fitlter_label2 = tk.Label(self.entry_frame2,bg=color1, text="最大宽度:")
+        self.fitlter_label2 = tk.Label(self.entry_frame2,bg=color1, text="maximum width")
         self.fitlter_label2.pack(side=LEFT)
         self.entry_maxw = tk.Entry(self.entry_frame2)
         self.entry_maxw.pack(side=tk.LEFT)
@@ -70,7 +70,7 @@ class Framelist(tk.Tk):
         self.entry_frame3 = tk.Frame(self.search_frame,bg=color1, width = 280, height= 50)
         self.entry_frame3.pack(side=tk.TOP, fill=X)
         self.entry_frame3.pack_propagate(False)
-        self.fitlter_label3 = tk.Label(self.entry_frame3, bg=color1,text="最小高度:")
+        self.fitlter_label3 = tk.Label(self.entry_frame3, bg=color1,text="minimum height")
         self.fitlter_label3.pack(side=LEFT)
         self.entry_minh = tk.Entry(self.entry_frame3)
         self.entry_minh.pack(side=tk.LEFT)
@@ -78,7 +78,7 @@ class Framelist(tk.Tk):
         self.entry_frame4 = tk.Frame(self.search_frame, bg=color1,width = 280, height= 50)
         self.entry_frame4.pack(side=tk.TOP, fill=X)
         self.entry_frame4.pack_propagate(False)
-        self.fitlter_label4 = tk.Label(self.entry_frame4, bg=color1,text="最大高度:")
+        self.fitlter_label4 = tk.Label(self.entry_frame4, bg=color1,text="maximum height")
         self.fitlter_label4.pack(side=LEFT)
         self.entry_maxh = tk.Entry(self.entry_frame4)
         self.entry_maxh.pack(side=tk.LEFT)
@@ -95,7 +95,7 @@ class Framelist(tk.Tk):
         self.upload_frame.pack_propagate(False)
 
         self.search_frame_title_label = tk.Label(self.upload_frame, 
-                                                 text="添加图片",
+                                                 text="add new image",
                                                  bg=color1,
                                                  fg="red", 
                                                  font=("Microsoft YaHei", 14, "bold"))
@@ -103,7 +103,7 @@ class Framelist(tk.Tk):
 
         self.upload_frame1 = tk.Frame(self.upload_frame, bg=color1, width = 280, height= 50)
         self.upload_frame1.pack(side=tk.TOP, fill=X)
-        self.upload_label1 = tk.Label(self.upload_frame1, bg=color1, text="图片或文件夹路径：")
+        self.upload_label1 = tk.Label(self.upload_frame1, bg=color1, text="image/directory path ")
         self.upload_label1.pack(side=tk.LEFT)
         
 
