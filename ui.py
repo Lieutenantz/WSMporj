@@ -147,7 +147,8 @@ class Framelist(tk.Tk):
         
         # 返回的是图片路径和数据
         self.images, self.scores = self.SE.serve(text, topn, w1, w2, h1, h2)
-
+        for widget in self.frame_list.winfo_children():
+            widget.destroy()
         # 获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
         self.create_frames()
         
