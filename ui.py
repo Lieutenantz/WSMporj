@@ -25,7 +25,7 @@ class Framelist(tk.Tk):
         self.entry_frame1 = tk.Frame(self.entry_frame)
         self.entry_frame1.pack()
 
-        self.fitlter_label1 = tk.Label(self.entry_frame1, text="宽度范围：")
+        self.fitlter_label1 = tk.Label(self.entry_frame1, text="weight ")
         self.fitlter_label1.pack(side=LEFT)
         self.entry_minw = tk.Entry(self.entry_frame1, width=10)
         self.entry_minw.pack(side=tk.LEFT)
@@ -36,7 +36,7 @@ class Framelist(tk.Tk):
         self.fitlter_label3 = tk.Label(self.entry_frame1, text="        ")
         self.fitlter_label3.pack(side=LEFT)
 
-        self.fitlter_label4 = tk.Label(self.entry_frame1, text="高度范围：")
+        self.fitlter_label4 = tk.Label(self.entry_frame1, text="height ")
         self.fitlter_label4.pack(side=LEFT)
         self.entry_minh = tk.Entry(self.entry_frame1, width=10)
         self.entry_minh.pack(side=tk.LEFT)
@@ -46,17 +46,17 @@ class Framelist(tk.Tk):
         self.entry_maxh.pack(side=tk.LEFT)
 
         #上传图片功能
-        self.search_button = tk.Button(self.window, text='search', 
-                                       command=self.search, bg='red', fg='white')
+        self.search_button = ttk.Button(self.window, text='search', 
+                                       command=self.search)
         self.search_button.pack()
         self.upload_frame = tk.Frame(self.window, height = 30)
         self.upload_frame.pack()
-        self.upload_label = tk.Label(self.upload_frame, text="图片或文件夹路径：")
+        self.upload_label = tk.Label(self.upload_frame, text="image/directory path ")
         self.upload_label.pack(side=LEFT)
         self.upload_entry = tk.Entry(self.upload_frame, width=50)
         self.upload_entry.pack(side=tk.LEFT)
-        self.upload_button = tk.Button(self.upload_frame, text='添加图片', 
-                                       command=self.add_image, bg='red', fg='white')
+        self.upload_button = ttk.Button(self.upload_frame, text='add new images ', 
+                                       command=self.add_image)
         self.upload_button.pack()
 
         self.upload_demo = tk.Label(self.upload_frame, text="",width=40)
