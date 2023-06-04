@@ -67,6 +67,11 @@ class SearchEngine:
         top_n_index = [index_list[idx] for idx in top_n_idx]
         top_n_score = [float(cosine_sim_score_list[idx]) for idx in top_n_idx]
 
+        for idx, score in zip(top_n_index, top_n_score):
+            if score < 0.239:
+                top_n_index.remove(idx)
+                top_n_score.remove(score)
+
         return top_n_index, top_n_score
     
     def serve(self, query, topn=20, minimum_width=None, maximum_width=None, minimum_height=None, maximum_height=None):
