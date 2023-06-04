@@ -6,8 +6,8 @@ from utils import get_config
 import search_engine as se
 import import_images as ii
 
-color1 = "#66CCFF"
-color2 = "#90EE90" # 浅绿
+color1 = "#66CCFF" # 蓝色，菜单底色
+color2 = "#90EE90" # 浅绿，背景色
 fig_size = 300
 topn = 20 # 展示的结果图片数
 
@@ -18,8 +18,9 @@ class Framelist(tk.Tk):
         self.window.title("WSM IMAGE SEARCH ENGINE",)
         self.window.geometry("1000x800")  
 
+
         # 左侧展示图片的滚动栏
-        self.scrollable_frame = tk.Frame(self.window, bg="white", width=700)  # 设置背景色为白色
+        self.scrollable_frame = tk.Frame(self.window, bg="white", width=1000)  # 设置背景色为白色
         self.scrollable_frame.pack(side=tk.LEFT, fill=tk.Y)
         self.scrollable_frame.pack_propagate(False)
 
@@ -172,9 +173,9 @@ class Framelist(tk.Tk):
             information += f"{self.scores[idx]*100:5.3f}%"
             information += '\n'
             
-            # information += "File size:"
-            # information += self.file_size[idx]
-            # information += '\n'
+            information += "File size:"
+            information +=f"{self.size_list[idx]//1024}KB"
+            information += '\n'
             
             information += "Dimensions:"
             information += "{0}".format(self.widths[idx])
@@ -226,7 +227,8 @@ class Framelist(tk.Tk):
             h2 = None
         
         # 返回的是图片路径和数据
-        self.images, self.scores, self.widths, self.heights = self.SE.serve(text, topn, w1, w2, h1, h2)
+        self.images, self.scores, self.widths, self.heights, self.size_list = self.SE.serve(text, topn, w1, w2, h1, h2)
+
         for widget in self.frame_list.winfo_children():
             widget.destroy()
         # 获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
