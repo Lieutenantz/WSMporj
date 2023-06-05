@@ -215,13 +215,13 @@ class Framelist(tk.Tk):
         # 获取尺寸限制
         w1 = self.entry_minw.get()
         if not w1:
-            w1 = None
+            w1 = 0
         w2 = self.entry_maxw.get()
         if not w1:
             w2 = None
         h1 = self.entry_minh.get()
         if not w1:
-            h1 = None
+            h1 = 0
         h2 = self.entry_maxh.get()
         if not w1:
             h2 = None
