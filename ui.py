@@ -11,6 +11,8 @@ color2 = "#90EE90" # 浅绿，背景色
 fig_size = 300
 topn = 20 # 展示的结果图片数
 
+SIZE_INF = 100000 #图片的最大尺寸，如果筛选条件中max值为空，则为该值
+
 class Framelist(tk.Tk):
     def __init__(self):
         self.window = tk.Tk()
@@ -214,17 +216,17 @@ class Framelist(tk.Tk):
 
         # 获取尺寸限制
         w1 = self.entry_minw.get()
-        if not w1:
+        if w1 == "":
             w1 = 0
         w2 = self.entry_maxw.get()
-        if not w1:
-            w2 = None
+        if w2 == "":
+            w2 = SIZE_INF
         h1 = self.entry_minh.get()
-        if not w1:
+        if h1 == "":
             h1 = 0
         h2 = self.entry_maxh.get()
-        if not w1:
-            h2 = None
+        if h2 = "":
+            h2 = SIZE_INF
         
         # 返回的是图片路径和数据
         self.images, self.scores, self.widths, self.heights, self.size_list = self.SE.serve(text, topn, w1, w2, h1, h2)
