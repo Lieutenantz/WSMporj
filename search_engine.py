@@ -117,7 +117,7 @@ class SearchEngine:
         if minimum_width != None: args['minimum_width'] = minimum_width
         if maximum_width != None: args['maximum_width'] = maximum_width
         if minimum_height != None: args['minimum_height'] = minimum_height
-        if maximum_height != None: args['minimum_height'] = maximum_height
+        if maximum_height != None: args['maximum_height'] = maximum_height
         
         top_n_index, top_n_score, top_n_width, top_n_height, top_n_size = self._search(text_feature, topn, args)
         return top_n_index, top_n_score, top_n_width, top_n_height, top_n_size
