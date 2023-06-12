@@ -205,6 +205,42 @@ class Framelist(tk.Tk):
     def _on_mousewheel(self, event):
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         
+    def show_alert(self, message):
+        alert_window = tk.Toplevel(self.window)
+        alert_window.title("")
+
+        def on_close():
+            # 解除模态状态
+            alert_window.grab_release()
+            alert_window.destroy()
+        
+        alert_window.grab_set()
+
+         # 设置弹窗的尺寸
+        alert_window.geometry("300x200")
+        
+        # 获取屏幕宽度和高度
+        screen_width = alert_window.winfo_screenwidth()
+        screen_height = alert_window.winfo_screenheight()
+        
+        # 计算弹窗的位置
+        window_width = alert_window.winfo_width()
+        window_height = alert_window.winfo_height()
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        # 设置弹窗的位置
+        alert_window.geometry(f"+{x}+{y}")
+        label = tk.Label(alert_window, width=200, height=150)
+
+        if message == 0:
+            label.config(text="No relative picture has been found!")
+        elif message == 1:
+            label.config(text="Adding pictures suceess!")
+        elif message == 1:
+            label.config(text="Adding pictures fail!")
+        label.pack()
+        
     def run(self):
         config = get_config()
         self.SE = se.SearchEngine(config)
@@ -213,6 +249,7 @@ class Framelist(tk.Tk):
 
     def search(self):
         text = self.entry.get()
+        self.entry.delete(0, tk.END)
 
         # 获取尺寸限制
         w1 = self.entry_minw.get()
@@ -234,7 +271,10 @@ class Framelist(tk.Tk):
         for widget in self.frame_list.winfo_children():
             widget.destroy()
         # 获得了存放图片的数组，接下来依据该数据的长度，创建等量的标签
-        self.create_frames()
+        if len(self.images):
+            self.create_frames()
+        else:
+            self.show_alert(0)
         
     # 根据路径获取单张图片
     def load_image(self, path):
@@ -245,11 +285,11 @@ class Framelist(tk.Tk):
     
     def add_image(self):
         path = self.upload_entry.get()
+        self.upload_entry.delete(0, tk.END)
         if ii.tools(path):
-            self.upload_demo.config(text="新增图片成功")  # 插入新的文本
+            self.show_alert(message=1)
         else:
-            self.upload_demo.config(text="新增图片失败")  # 插入新的文本
-
+            self.show_alert(message=2)
 
 if __name__=="__main__":
     a = Framelist()
